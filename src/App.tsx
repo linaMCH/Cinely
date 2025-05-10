@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import Movies from "./pages/Movies";
+import MovieDetail from "./pages/MovieDetail";
+import Ticket from "./pages/Ticket";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -49,6 +51,22 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <Movies />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/movie/:id" 
+              element={
+                <ProtectedRoute>
+                  <MovieDetail />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/ticket" 
+              element={
+                <ProtectedRoute>
+                  <Ticket />
                 </ProtectedRoute>
               } 
             />

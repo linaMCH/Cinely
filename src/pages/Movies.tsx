@@ -42,13 +42,6 @@ const Movies = () => {
     fetchMovies();
   }, [toast, apiKey]);
 
-  const handleReservation = (movie: Movie) => {
-    toast({
-      title: "Réservation initiée",
-      description: `Vous avez sélectionné "${movie.title}". Cette fonctionnalité sera disponible prochainement.`,
-    });
-  };
-
   const filteredMovies = movies.filter(movie => 
     movie.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -99,7 +92,6 @@ const Movies = () => {
               <MovieCard
                 key={movie.id}
                 movie={movie}
-                onReserve={handleReservation}
               />
             ))}
           </div>

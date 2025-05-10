@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
+import { useNavigate } from 'react-router-dom';
 
 export interface Movie {
   id: number;
@@ -13,13 +14,17 @@ export interface Movie {
 
 interface MovieCardProps {
   movie: Movie;
-  onReserve: (movie: Movie) => void;
 }
 
-const MovieCard: React.FC<MovieCardProps> = ({ movie, onReserve }) => {
+const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
   const posterUrl = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
   const rating = Math.round(movie.vote_average * 10) / 10;
+  
+  const handleReservation = () => {
+    navigate(`/movie/${movie.id}`);
+  };
   
   return (
     <div className="movie-card animate-fade-in">
@@ -47,7 +52,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, onReserve }) => {
           {movie.overview || "Aucune description disponible."}
         </p>
         <Button 
-          onClick={() => onReserve(movie)}
+          onClick={handleReservation}
           className="mt-3 w-full bg-movie-primary text-black hover:bg-movie-primary-hover"
         >
           Réserver
