@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Movie } from "@/components/MovieCard";
 import { CheckCircle, ArrowLeft } from "lucide-react";
+import QRCode from "react-qr-code";
+import { motion } from "framer-motion";
 
 interface TicketState {
   movie: Movie;
@@ -38,6 +40,15 @@ const Ticket = () => {
   // Generate a random ticket number
   const ticketNumber = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
   
+  // Create QR code data
+  const qrData = JSON.stringify({
+    movie: movie.title,
+    seats: seats.join(", "),
+    ticketNumber,
+    time: "20:00",
+    date: new Date().toLocaleDateString('fr-FR')
+  });
+  
   return (
     <div className="min-h-screen bg-movie-dark pb-20">
       <div className="px-6 pt-6">
@@ -50,22 +61,37 @@ const Ticket = () => {
           Retour aux films
         </Button>
         
-        <div className="mb-6 flex items-center justify-center">
+        <motion.div 
+          className="mb-6 flex items-center justify-center"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.5 }}
+        >
           <div className="flex items-center justify-center rounded-full bg-green-500 bg-opacity-20 p-3">
             <CheckCircle className="h-10 w-10 text-green-500" />
           </div>
-        </div>
+        </motion.div>
         
-        <div className="text-center">
+        <motion.div 
+          className="text-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
           <h1 className="mb-2 text-2xl font-bold text-white">Réservation confirmée!</h1>
           <p className="mb-6 text-movie-text-muted">
             Votre ticket a été envoyé à votre email.
           </p>
-        </div>
+        </motion.div>
       </div>
 
       {/* Ticket Card */}
-      <div className="mx-auto max-w-md px-6">
+      <motion.div 
+        className="mx-auto max-w-md px-6"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.4 }}
+      >
         <div className="relative overflow-hidden rounded-2xl bg-movie-dark-light">
           {/* Ticket top part */}
           <div className="p-6">
@@ -136,32 +162,34 @@ const Ticket = () => {
               </div>
             </div>
             
-            <div className="mt-6 flex w-full justify-center">
-              {/* Barcode */}
-              <div className="h-12 w-3/4">
-                <div className="flex h-full w-full items-center justify-between">
-                  {Array.from({ length: 30 }).map((_, i) => (
-                    <div 
-                      key={i}
-                      className="h-full w-px bg-white opacity-70"
-                      style={{ height: `${Math.floor(Math.random() * 50) + 50}%` }}
-                    ></div>
-                  ))}
-                </div>
+            {/* QR Code */}
+            <div className="mt-4 flex justify-center">
+              <div className="bg-white p-3 rounded-md">
+                <QRCode value={qrData} size={120} />
               </div>
             </div>
+            
+            {/* Ticket notice */}
+            <p className="mt-4 text-xs text-center text-movie-text-muted">
+              Présentez ce ticket à l'entrée. Non remboursable 24h avant.
+            </p>
           </div>
         </div>
-      </div>
+      </motion.div>
       
-      <div className="mt-8 text-center">
+      <motion.div 
+        className="mt-8 text-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.8 }}
+      >
         <Button 
           className="bg-movie-primary text-black hover:bg-movie-primary-hover"
-          onClick={() => navigate("/movies")}
+          onClick={() => navigate("/")}
         >
           Retour à l'accueil
         </Button>
-      </div>
+      </motion.div>
     </div>
   );
 };
